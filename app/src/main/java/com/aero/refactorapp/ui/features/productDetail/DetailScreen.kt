@@ -18,8 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.aero.modularstore.navigation.NavigationCallbacks
-import com.aero.modularstore.repository.CartRepository
+import com.aero.refactorapp.ui.navigation.NavigationCallbacks
 import com.aero.refactorapp.ui.features.productDetail.components.AddToCartButton
 import com.aero.refactorapp.ui.features.productDetail.components.ProductDescriptionSection
 import com.aero.refactorapp.ui.features.productDetail.components.ProductInfoSection
@@ -28,13 +27,11 @@ import com.aero.refactorapp.ui.features.productDetail.components.PriceSection
 
 @Composable
 fun DetailScreen(
-    productId: Int,
     navigationCallbacks: NavigationCallbacks,
-    detailViewModel: DetailViewModel,
-    onFavoriteToggle: (Int) -> Unit
+    detailViewModel: DetailViewModel
 ) {
     val uiState by detailViewModel.uiState.collectAsState()
-    val product = uiState.getProduct(productId)
+    val product = uiState.product
 
     if (product == null) {
         ProductNotFoundSection()
@@ -74,8 +71,7 @@ fun DetailScreen(
 
             AddToCartButton(
                 onClick = {
-                    // should call to viewmodel then viewmodel call to repository
-                    CartRepository.addToCart(product)
+                    detailViewModel.addToCart()
                     navigationCallbacks.navigateToCart()
                 }
             )

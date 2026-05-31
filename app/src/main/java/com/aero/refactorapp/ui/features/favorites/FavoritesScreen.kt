@@ -1,4 +1,4 @@
-package com.aero.modularstore.ui.screens.favorites
+package com.aero.refactorapp.ui.features.favorites
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,15 +11,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.aero.modularstore.navigation.NavigationCallbacks
-import com.aero.modularstore.ui.screens.favorites.components.EmptyFavoritesSection
-import com.aero.modularstore.ui.screens.home.components.ProductCard
+import com.aero.refactorapp.ui.navigation.NavigationCallbacks
+import com.aero.refactorapp.ui.features.favorites.components.EmptyFavoritesSection
+import com.aero.refactorapp.ui.features.productstore.components.ProductCard
 
 @Composable
 fun FavoritesScreen(
     navigationCallbacks: NavigationCallbacks,
-    favoritesViewModel: FavoritesViewModel,
-    onFavoriteToggle: (Int) -> Unit
+    favoritesViewModel: FavoritesViewModel
 ) {
     val uiState by favoritesViewModel.uiState.collectAsState()
     val favoriteProducts = uiState.favoriteProducts
@@ -44,7 +43,7 @@ fun FavoritesScreen(
                         },
                         isFavorite = favoritesViewModel.isFavorite(product.id),
                         onFavoriteToggle = { productId ->
-                            onFavoriteToggle(productId)
+                            favoritesViewModel.toggleFavorite(productId)
                         }
                     )
                 }
@@ -52,4 +51,3 @@ fun FavoritesScreen(
         }
     }
 }
-

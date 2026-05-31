@@ -1,4 +1,4 @@
-package com.aero.modularstore.ui.screens.favorites.components
+package com.aero.refactorapp.ui.features.favorites.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,4 +41,3 @@ fun EmptyFavoritesSection() {
         )
     }
 }
-

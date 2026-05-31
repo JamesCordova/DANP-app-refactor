@@ -1,45 +1,65 @@
 package com.aero.refactorapp.ui.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.aero.refactorapp.ui.features.cart.CartScreen
+import com.aero.refactorapp.ui.features.cart.CartViewModel
+import com.aero.refactorapp.ui.features.favorites.FavoritesScreen
+import com.aero.refactorapp.ui.features.favorites.FavoritesViewModel
+import com.aero.refactorapp.ui.features.productDetail.DetailScreen
+import com.aero.refactorapp.ui.features.productDetail.DetailViewModel
+import com.aero.refactorapp.ui.features.productstore.ProductStoreScreen
+import com.aero.refactorapp.ui.features.productstore.ProductStoreViewModel
+import com.aero.refactorapp.ui.navigation.components.*
+
 @Composable
 fun AppNavigation(
     onThemeChange: (String) -> Unit
 ) {
     val navController = rememberNavController()
-    val homeViewModelFactory = HomeViewModelFactory()
-    val homeViewModel: HomeViewModel = viewModel(factory = homeViewModelFactory)
-    val homeUiState by homeViewModel.uiState.collectAsState()
+    val productStoreViewModel: ProductStoreViewModel = hiltViewModel()
 
     var showCheckoutSuccessDialog by remember { mutableStateOf(false) }
 
-    // Derive current route from navController back stack to stay in sync with navigation
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route?.substringBefore("/{") ?: NavScreens.HOME.route
+    val currentRoute = navBackStackEntry?.destination?.route?.substringBefore("/") ?: NavScreens.HOME.route
 
-    // Get productId from back stack arguments for detail screen
-    val productId = navBackStackEntry?.arguments?.getString("productId")?.toIntOrNull() ?: 0
-
-    // Define navigation callbacks
-    val navigationCallbacks = NavigationCallbacks(
-        navigateToDetail = { id -> navController.navigate("detail/$id") },
-        navigateBack = { navController.popBackStack() },
-        navigateToHome = {
-            navController.navigate(NavScreens.HOME.route) {
-                popUpTo(navController.graph.startDestinationId)
-                launchSingleTop = true
+    val navigationCallbacks = remember(navController) {
+        NavigationCallbacks(
+            navigateToDetail = { id -> navController.navigate("detail/$id") },
+            navigateBack = { navController.popBackStack() },
+            navigateToHome = {
+                navController.navigate(NavScreens.HOME.route) {
+                    popUpTo(navController.graph.startDestinationId)
+                    launchSingleTop = true
+                }
+            },
+            navigateToFavorites = {
+                navController.navigate(NavScreens.FAVORITES.route) {
+                    popUpTo(navController.graph.startDestinationId)
+                    launchSingleTop = true
+                }
+            },
+            navigateToCart = {
+                navController.navigate(NavScreens.CART.route) {
+                    launchSingleTop = true
+                }
             }
-        },
-        navigateToFavorites = {
-            navController.navigate(NavScreens.FAVORITES.route) {
-                popUpTo(navController.graph.startDestinationId)
-                launchSingleTop = true
-            }
-        },
-        navigateToCart = {
-            navController.navigate(NavScreens.CART.route) {
-                launchSingleTop = true
-            }
-        }
-    )
+        )
+    }
 
     if (showCheckoutSuccessDialog) {
         CheckoutSuccessDialog(
@@ -57,19 +77,19 @@ fun AppNavigation(
                 NavScreens.FAVORITES.route -> AppToolbar(title = NavScreens.FAVORITES.label)
                 NavScreens.CART.route -> AppToolbar(title = NavScreens.CART.label)
                 "detail" -> {
-                    val isFavorite = homeUiState.favoriteProductIds.contains(productId)
+                    val detailViewModel: DetailViewModel = hiltViewModel(navBackStackEntry!!)
+                    val detailUiState by detailViewModel.uiState.collectAsState()
                     DetailHeader(
-                        isFavorite = isFavorite,
+                        isFavorite = detailUiState.isFavorite,
                         onBack = navigationCallbacks.navigateBack,
-                        onFavoriteToggle = { homeViewModel.toggleFavorite(productId) }
+                        onFavoriteToggle = { detailViewModel.toggleFavorite() }
                     )
                 }
                 else -> {}
             }
         },
         bottomBar = {
-            // No mostrar BottomBar en DetailScreen ni CartScreen
-            if (!isDetailScreen(currentRoute) && currentRoute != NavScreens.CART.route) {
+            if (currentRoute != "detail" && currentRoute != NavScreens.CART.route) {
                 AppBottomNavigationBar(
                     currentRoute = currentRoute,
                     onNavigate = { route ->
@@ -90,47 +110,28 @@ fun AppNavigation(
                 .padding(paddingValues)
         ) {
             composable(NavScreens.HOME.route) {
-                HomeScreen(
+                ProductStoreScreen(
                     navigationCallbacks = navigationCallbacks,
                     onThemeChange = onThemeChange,
-                    homeViewModel = homeViewModel
+                    productStoreViewModel = productStoreViewModel
                 )
             }
             composable(NavScreens.FAVORITES.route) {
-                val favoritesViewModelFactory = FavoritesViewModelFactory(homeUiState.favoriteProductIds)
-                val favoritesViewModel: FavoritesViewModel = viewModel(
-                    factory = favoritesViewModelFactory
-                )
-
+                val favoritesViewModel: FavoritesViewModel = hiltViewModel()
                 FavoritesScreen(
                     navigationCallbacks = navigationCallbacks,
-                    favoritesViewModel = favoritesViewModel,
-                    onFavoriteToggle = { productId -> homeViewModel.toggleFavorite(productId) }
+                    favoritesViewModel = favoritesViewModel
                 )
             }
-            composable(
-                "detail/{productId}"
-            ) { backStack ->
-                val productId =
-                    backStack.arguments?.getString("productId")?.toIntOrNull() ?: 0
-                val detailViewModelFactory = DetailViewModelFactory(homeUiState.favoriteProductIds)
-                val detailViewModel: DetailViewModel = viewModel(
-                    factory = detailViewModelFactory
-                )
-
+            composable("detail/{productId}") {
+                val detailViewModel: DetailViewModel = hiltViewModel()
                 DetailScreen(
-                    productId = productId,
                     navigationCallbacks = navigationCallbacks,
-                    detailViewModel = detailViewModel,
-                    onFavoriteToggle = { productId -> homeViewModel.toggleFavorite(productId) }
+                    detailViewModel = detailViewModel
                 )
             }
             composable(NavScreens.CART.route) {
-                val cartViewModelFactory = CartViewModelFactory()
-                val cartViewModel: CartViewModel = viewModel(
-                    factory = cartViewModelFactory
-                )
-
+                val cartViewModel: CartViewModel = hiltViewModel()
                 CartScreen(
                     navigationCallbacks = navigationCallbacks,
                     cartViewModel = cartViewModel,

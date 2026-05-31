@@ -1,23 +1,28 @@
-package com.aero.modularstore.ui.screens.cart
+package com.aero.refactorapp.ui.features.cart
 
 import androidx.lifecycle.ViewModel
-import com.aero.modularstore.model.Cart
-import com.aero.modularstore.repository.CartRepository
+import com.aero.refactorapp.domain.model.Cart
+import com.aero.refactorapp.domain.repository.CartRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class CartViewModel : ViewModel() {
-    val cart: StateFlow<Cart> = CartRepository.cart
+@HiltViewModel
+class CartViewModel @Inject constructor(
+    private val cartRepository: CartRepository
+) : ViewModel() {
+    val cart: StateFlow<Cart> = cartRepository.cart
 
     fun removeFromCart(productId: Int) {
-        CartRepository.removeFromCart(productId)
+        cartRepository.removeFromCart(productId)
     }
 
     fun updateQuantity(productId: Int, quantity: Int) {
-        CartRepository.updateQuantity(productId, quantity)
+        cartRepository.updateQuantity(productId, quantity)
     }
 
     fun clearCart() {
-        CartRepository.clearCart()
+        cartRepository.clearCart()
     }
 
     fun getTotalPrice(): Double {
@@ -28,4 +33,3 @@ class CartViewModel : ViewModel() {
         return cart.value.totalItems
     }
 }
-

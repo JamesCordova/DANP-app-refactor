@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.aero.modularstore.ui.theme.AppThemeMode
+import com.aero.refactorapp.ui.theme.AppThemeMode
 
 @Composable
 fun ThemeSelector(

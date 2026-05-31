@@ -17,12 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.aero.modularstore.model.ProductCategory
+import com.aero.refactorapp.domain.model.CategoryProduct
 
 @Composable
 fun CategoryFilterButtons(
-	currentFilter: ProductCategory,
-	onFilterChange: (ProductCategory) -> Unit,
+	currentFilter: CategoryProduct,
+	onFilterChange: (CategoryProduct) -> Unit,
 	modifier: Modifier = Modifier
 ) {
 	Row(
@@ -34,7 +34,7 @@ fun CategoryFilterButtons(
 			.background(MaterialTheme.colorScheme.surfaceDim),
 		horizontalArrangement = Arrangement.spacedBy(8.dp)
 	) {
-		ProductCategory.entries.forEach { category ->
+		CategoryProduct.entries.forEach { category ->
 			CategoryFilterButton(
 				label = category.label,
 				isSelected = currentFilter == category,
@@ -76,7 +76,7 @@ private fun CategoryFilterButton(
 @Composable
 private fun CategoryFilterButtonsPreview() {
 	CategoryFilterButtons(
-		currentFilter = ProductCategory.ALL,
+		currentFilter = CategoryProduct.ALL,
 		onFilterChange = {}
 	)
 }

@@ -1,4 +1,4 @@
-package com.aero.modularstore.ui.screens.cart.components
+package com.aero.refactorapp.ui.features.cart.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -50,4 +50,3 @@ fun CartSummary(totalPrice: Double, totalItems: Int) {
         }
     }
 }
-

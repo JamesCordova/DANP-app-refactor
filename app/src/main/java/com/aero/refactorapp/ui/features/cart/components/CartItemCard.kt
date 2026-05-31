@@ -1,4 +1,4 @@
-package com.aero.modularstore.ui.screens.cart.components
+package com.aero.refactorapp.ui.features.cart.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.aero.modularstore.model.CartItem
+import com.aero.refactorapp.domain.model.CartItem
 
 @Composable
 fun CartItemCard(
@@ -95,4 +95,3 @@ fun CartItemCard(
         }
     }
 }
-

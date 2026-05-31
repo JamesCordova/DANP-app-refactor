@@ -1,84 +1,44 @@
-package com.aero.modularstore.ui.screens.favorites
+package com.aero.refactorapp.ui.features.favorites
 
 import androidx.lifecycle.ViewModel
-import com.aero.modularstore.model.Product
-import com.aero.modularstore.model.ProductCategory
-import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.lifecycle.viewModelScope
+import com.aero.refactorapp.domain.model.Product
+import com.aero.refactorapp.domain.repository.ProductRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 data class FavoritesUiState(
-    val products: List<Product> = defaultProducts,
-    val favoriteProductIds: List<Int> = emptyList()
-) {
-    val favoriteProducts: List<Product>
-        get() = products.filter { it.id in favoriteProductIds }
+    val favoriteProducts: List<Product> = emptyList(),
+    val favoriteProductIds: Set<Int> = emptySet()
+)
 
-    companion object {
-        private val defaultProducts = listOf(
-            Product(
-                id = 1,
-                name = "Laptop Gamer",
-                description = "RTX 4070 + Ryzen 9",
-                price = 2500.0,
-                category = ProductCategory.COMPUTERS,
-                imageUrl = "https://www.itsitio.com/wp-content/uploads/2020/07/G531-1-scaled-1.jpg"
-            ),
-            Product(
-                id = 2,
-                name = "Mechanical Keyboard",
-                description = "RGB Switch Blue",
-                price = 120.0,
-                category = ProductCategory.ACCESSORIES,
-                imageUrl = "https://i.insider.com/5fd7cf6b78a5740019a15560?width=1200&format=jpeg"
-            ),
-            Product(
-                id = 3,
-                name = "Gaming Mouse",
-                description = "16000 DPI",
-                price = 75.0,
-                category = ProductCategory.ACCESSORIES,
-                imageUrl = "https://dlcdnwebimgs.asus.com/gain/1F5AFFA6-D3DC-42CA-B37D-03DAAE123012/w750/h470/fwebp"
-            ),
-            Product(
-                id = 4,
-                name = "Iphone 27",
-                description = "144Hz IPS",
-                price = 1220.0,
-                category = ProductCategory.COMPUTERS,
-                imageUrl = "https://i.blogs.es/60b358/ios-27/500_333.webp"
-            )
-        )
-    }
-}
-
-class FavoritesViewModel(
-    favoriteProductIds: List<Int> = emptyList()
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(
+    private val productRepository: ProductRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(
-        FavoritesUiState(favoriteProductIds = favoriteProductIds)
+    val uiState: StateFlow<FavoritesUiState> = combine(
+        productRepository.products,
+        productRepository.favoriteProductIds
+    ) { products, favorites ->
+        FavoritesUiState(
+            favoriteProducts = products.filter { it.id in favorites },
+            favoriteProductIds = favorites
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = FavoritesUiState()
     )
-    val uiState: StateFlow<FavoritesUiState> = _uiState.asStateFlow()
-
-    fun updateFavorites(favoriteProductIds: List<Int>) {
-        _uiState.value = _uiState.value.copy(favoriteProductIds = favoriteProductIds)
-    }
 
     fun toggleFavorite(productId: Int) {
-        val currentFavorites = _uiState.value.favoriteProductIds.toMutableList()
-        if (currentFavorites.contains(productId)) {
-            currentFavorites.remove(productId)
-        } else {
-            currentFavorites.add(productId)
-        }
-        _uiState.value = _uiState.value.copy(favoriteProductIds = currentFavorites)
+        productRepository.toggleFavorite(productId)
     }
 
     fun isFavorite(productId: Int): Boolean {
-        return _uiState.value.favoriteProductIds.contains(productId)
-    }
-
-    fun getFavoriteCount(): Int {
-        return _uiState.value.favoriteProductIds.size
+        return uiState.value.favoriteProductIds.contains(productId)
     }
 }

@@ -1,4 +1,4 @@
-package com.aero.modularstore.ui.screens.cart
+package com.aero.refactorapp.ui.features.cart
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,12 +13,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.aero.modularstore.navigation.NavigationCallbacks
-import com.aero.modularstore.ui.screens.cart.components.CartActionButtons
-import com.aero.modularstore.ui.screens.cart.components.CartItemCard
-import com.aero.modularstore.ui.screens.cart.components.CartSummary
-import com.aero.modularstore.ui.screens.cart.components.EmptyCartActionButton
-import com.aero.modularstore.ui.screens.cart.components.EmptyCartSection
+import com.aero.refactorapp.ui.navigation.NavigationCallbacks
+import com.aero.refactorapp.ui.features.cart.components.CartActionButtons
+import com.aero.refactorapp.ui.features.cart.components.CartItemCard
+import com.aero.refactorapp.ui.features.cart.components.CartSummary
+import com.aero.refactorapp.ui.features.cart.components.EmptyCartActionButton
+import com.aero.refactorapp.ui.features.cart.components.EmptyCartSection
 
 @Composable
 fun CartScreen(

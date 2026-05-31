@@ -11,7 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.aero.modularstore.navigation.NavigationCallbacks
+import com.aero.refactorapp.ui.navigation.NavigationCallbacks
 import com.aero.refactorapp.ui.features.productstore.components.CategoryFilterButtons
 import com.aero.refactorapp.ui.features.productstore.components.ProductCard
 import com.aero.refactorapp.ui.features.productstore.components.SearchBar
@@ -21,9 +21,9 @@ import com.aero.refactorapp.ui.features.productstore.components.ThemeSelector
 fun ProductStoreScreen(
     navigationCallbacks: NavigationCallbacks,
     onThemeChange: (String) -> Unit,
-    homeViewModel: HomeViewModel,
+    productStoreViewModel: ProductStoreViewModel,
 ) {
-    val uiState by homeViewModel.uiState.collectAsState()
+    val uiState by productStoreViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -35,12 +35,12 @@ fun ProductStoreScreen(
         Spacer(modifier = Modifier.height(12.dp))
         SearchBar(
             query = uiState.searchQuery,
-            onQueryChange = homeViewModel::onSearchQueryChanged
+            onQueryChange = productStoreViewModel::onSearchQueryChanged
         )
         Spacer(modifier = Modifier.height(12.dp))
         CategoryFilterButtons(
             currentFilter = uiState.selectedCategory,
-            onFilterChange = homeViewModel::onCategorySelected
+            onFilterChange = productStoreViewModel::onCategorySelected
         )
         Spacer(modifier = Modifier.height(12.dp))
         LazyColumn {
@@ -53,8 +53,8 @@ fun ProductStoreScreen(
                     onViewDetail = { product ->
                         navigationCallbacks.navigateToDetail(product.id)
                     },
-                    isFavorite = homeViewModel.isFavorite(product.id),
-                    onFavoriteToggle = homeViewModel::toggleFavorite
+                    isFavorite = productStoreViewModel.isFavorite(product.id),
+                    onFavoriteToggle = productStoreViewModel::toggleFavorite
                 )
             }
         }
