@@ -2,7 +2,6 @@ package com.aero.refactorapp.ui.features.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aero.refactorapp.domain.model.Product
 import com.aero.refactorapp.domain.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -10,11 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
-
-data class FavoritesUiState(
-    val favoriteProducts: List<Product> = emptyList(),
-    val favoriteProductIds: Set<Int> = emptySet()
-)
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(

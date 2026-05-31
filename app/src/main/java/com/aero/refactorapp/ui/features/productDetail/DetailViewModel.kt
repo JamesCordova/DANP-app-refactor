@@ -3,7 +3,6 @@ package com.aero.refactorapp.ui.features.productDetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aero.refactorapp.domain.model.Product
 import com.aero.refactorapp.domain.repository.CartRepository
 import com.aero.refactorapp.domain.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,11 +12,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
-
-data class DetailUiState(
-    val product: Product? = null,
-    val isFavorite: Boolean = false
-)
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(

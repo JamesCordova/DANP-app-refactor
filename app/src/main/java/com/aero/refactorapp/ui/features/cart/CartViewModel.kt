@@ -1,17 +1,26 @@
 package com.aero.refactorapp.ui.features.cart
 
 import androidx.lifecycle.ViewModel
-import com.aero.refactorapp.domain.model.Cart
+import androidx.lifecycle.viewModelScope
 import com.aero.refactorapp.domain.repository.CartRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
     private val cartRepository: CartRepository
 ) : ViewModel() {
-    val cart: StateFlow<Cart> = cartRepository.cart
+    val uiState: StateFlow<CartUiState> = cartRepository.cart
+        .map { CartUiState(it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = CartUiState()
+        )
 
     fun removeFromCart(productId: Int) {
         cartRepository.removeFromCart(productId)
@@ -26,10 +35,10 @@ class CartViewModel @Inject constructor(
     }
 
     fun getTotalPrice(): Double {
-        return cart.value.totalPrice
+        return uiState.value.cart.totalPrice
     }
 
     fun getTotalItems(): Int {
-        return cart.value.totalItems
+        return uiState.value.cart.totalItems
     }
 }

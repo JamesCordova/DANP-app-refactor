@@ -26,14 +26,15 @@ fun CartScreen(
     cartViewModel: CartViewModel,
     onCheckoutSuccess: () -> Unit
 ) {
-    val cartState by cartViewModel.cart.collectAsState()
+    val uiState by cartViewModel.uiState.collectAsState()
+    val cart = uiState.cart
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        if (cartState.items.isEmpty()) {
+        if (cart.items.isEmpty()) {
             EmptyCartSection()
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -46,7 +47,7 @@ fun CartScreen(
                     .fillMaxWidth()
             ) {
                 items(
-                    items = cartState.items,
+                    items = cart.items,
                     key = { it.product.id }
                 ) { cartItem ->
                     CartItemCard(
@@ -63,8 +64,8 @@ fun CartScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             CartSummary(
-                totalPrice = cartState.totalPrice,
-                totalItems = cartState.totalItems
+                totalPrice = cart.totalPrice,
+                totalItems = cart.totalItems
             )
 
             Spacer(modifier = Modifier.height(16.dp))
