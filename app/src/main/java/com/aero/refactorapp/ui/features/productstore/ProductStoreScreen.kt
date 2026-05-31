@@ -18,7 +18,7 @@ import com.aero.refactorapp.ui.features.productstore.components.SearchBar
 import com.aero.refactorapp.ui.features.productstore.components.ThemeSelector
 
 @Composable
-fun HomeScreen(
+fun ProductStoreScreen(
     navigationCallbacks: NavigationCallbacks,
     onThemeChange: (String) -> Unit,
     homeViewModel: HomeViewModel,

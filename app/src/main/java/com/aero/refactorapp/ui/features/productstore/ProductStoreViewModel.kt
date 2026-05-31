@@ -76,7 +76,7 @@ data class HomeUiState(
 	}
 }
 
-class HomeViewModel : ViewModel() {
+class ProductStoreViewModel : ViewModel() {
 	private val _uiState = MutableStateFlow(HomeUiState())
 	val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
