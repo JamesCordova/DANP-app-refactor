@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(
     fun onThemeChange(modeName: String) {
         val mode = try {
             AppThemeMode.valueOf(modeName)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             AppThemeMode.BLUE
         }
         setThemeMode(mode)

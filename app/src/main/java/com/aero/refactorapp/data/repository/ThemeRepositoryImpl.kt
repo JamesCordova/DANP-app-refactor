@@ -16,7 +16,7 @@ private val Context.dataStore by preferencesDataStore(name = "settings")
 
 @Singleton
 class ThemeRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : ThemeRepository {
 
     private object PreferencesKeys {
@@ -28,7 +28,7 @@ class ThemeRepositoryImpl @Inject constructor(
             val modeName = preferences[PreferencesKeys.THEME_MODE] ?: AppThemeMode.BLUE.name
             try {
                 AppThemeMode.valueOf(modeName)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 AppThemeMode.BLUE
             }
         }
