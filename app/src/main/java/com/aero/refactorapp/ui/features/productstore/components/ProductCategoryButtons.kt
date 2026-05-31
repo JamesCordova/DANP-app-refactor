@@ -2,6 +2,7 @@ package com.aero.refactorapp.ui.features.productstore.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,66 +18,71 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.aero.refactorapp.domain.model.ProductCategory
 
 @Composable
 fun ProductCategoryButtons(
-	currentFilter: ProductCategory,
-	onFilterChange: (ProductCategory) -> Unit,
-	modifier: Modifier = Modifier
+    categories: List<String>,
+    currentFilter: String,
+    onFilterChange: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-	Row(
-		modifier = modifier
-			.padding(8.dp)
-			.fillMaxWidth()
-			.height(48.dp)
-			.clip(RoundedCornerShape(percent = 50))
-			.background(MaterialTheme.colorScheme.surfaceDim),
-		horizontalArrangement = Arrangement.spacedBy(8.dp)
-	) {
-		ProductCategory.entries.forEach { category ->
-			CategoryFilterButton(
-				label = category.label,
-				isSelected = currentFilter == category,
-				onClick = { onFilterChange(category) },
-				modifier = Modifier.weight(1f)
-			)
-		}
-	}
+    Row(
+        modifier = modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .height(48.dp)
+            .clip(RoundedCornerShape(percent = 50))
+            .background(MaterialTheme.colorScheme.surfaceDim),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        categories.forEach { category ->
+            CategoryFilterButton(
+                label = category,
+                isSelected = currentFilter == category,
+                onClick = { onFilterChange(category) },
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
 }
 
 @Composable
 private fun CategoryFilterButton(
-	label: String,
-	isSelected: Boolean,
-	onClick: () -> Unit,
-	modifier: Modifier = Modifier
+    label: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-	Button(
-		onClick = onClick,
-		modifier = modifier.fillMaxHeight(),
-		colors = ButtonDefaults.buttonColors(
-			containerColor = if (isSelected) {
-				MaterialTheme.colorScheme.primary
-			} else {
-				MaterialTheme.colorScheme.surfaceDim
-			},
-			contentColor = if (isSelected) {
-				MaterialTheme.colorScheme.onPrimary
-			} else {
-				MaterialTheme.colorScheme.onSurface
-			}
-		)
-	) {
-		Text(label)
-	}
+    Button(
+        onClick = onClick,
+        modifier = modifier.fillMaxHeight(),
+        contentPadding = PaddingValues(horizontal = 4.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isSelected) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.surfaceDim
+            },
+            contentColor = if (isSelected) {
+                MaterialTheme.colorScheme.onPrimary
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            }
+        )
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun ProductCategoryButtonsPreview() {
-	ProductCategoryButtons(
-		currentFilter = ProductCategory.ALL,
-		onFilterChange = {}
-	)
+    ProductCategoryButtons(
+        categories = listOf("Todos", "Dispositivos", "Accesorios"),
+        currentFilter = "Todos",
+        onFilterChange = {}
+    )
 }

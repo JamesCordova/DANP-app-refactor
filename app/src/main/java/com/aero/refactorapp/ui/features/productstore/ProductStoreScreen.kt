@@ -39,6 +39,7 @@ fun ProductStoreScreen(
         )
         Spacer(modifier = Modifier.height(12.dp))
         ProductCategoryButtons(
+            categories = uiState.categories,
             currentFilter = uiState.selectedCategory,
             onFilterChange = productStoreViewModel::onCategorySelected
         )

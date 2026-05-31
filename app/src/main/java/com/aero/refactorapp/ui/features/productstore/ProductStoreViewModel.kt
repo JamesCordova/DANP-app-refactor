@@ -16,7 +16,8 @@ import javax.inject.Inject
 
 data class HomeUiState(
     val products: List<Product> = emptyList(),
-    val selectedCategory: ProductCategory = ProductCategory.ALL,
+    val categories: List<String> = emptyList(),
+    val selectedCategory: String = "Todos",
     val favoriteProductIds: Set<Int> = emptySet(),
     val searchQuery: String = "",
     val currentUser: User = User(
@@ -28,10 +29,10 @@ data class HomeUiState(
 ) {
 	val filteredProducts: List<Product>
 		get() {
-			val categoryFiltered = if (selectedCategory == ProductCategory.ALL) {
+			val categoryFiltered = if (selectedCategory == "Todos") {
 				products
 			} else {
-				products.filter { it.category == selectedCategory }
+				products.filter { it.category.label == selectedCategory }
 			}
 
 			return if (searchQuery.isBlank()) {
@@ -49,17 +50,19 @@ data class HomeUiState(
 class ProductStoreViewModel @Inject constructor(
     private val productRepository: ProductRepository
 ) : ViewModel() {
-    private val _selectedCategory = MutableStateFlow(ProductCategory.ALL)
+    private val _selectedCategory = MutableStateFlow("Todos")
     private val _searchQuery = MutableStateFlow("")
 
     val uiState: StateFlow<HomeUiState> = combine(
         productRepository.products,
+        productRepository.categories,
         productRepository.favoriteProductIds,
         _selectedCategory,
         _searchQuery
-    ) { products, favorites, category, query ->
+    ) { products, categories, favorites, category, query ->
         HomeUiState(
             products = products,
+            categories = listOf("Todos") + categories,
             favoriteProductIds = favorites,
             selectedCategory = category,
             searchQuery = query
@@ -70,7 +73,7 @@ class ProductStoreViewModel @Inject constructor(
         initialValue = HomeUiState()
     )
 
-	fun onCategorySelected(category: ProductCategory) {
+	fun onCategorySelected(category: String) {
 		_selectedCategory.value = category
 	}
 

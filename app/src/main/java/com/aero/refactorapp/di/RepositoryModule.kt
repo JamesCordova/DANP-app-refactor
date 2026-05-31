@@ -1,5 +1,7 @@
 package com.aero.refactorapp.di
 
+import com.aero.refactorapp.data.remote.ProductRemoteDataSource
+import com.aero.refactorapp.data.remote.ProductRemoteDataSourceImpl
 import com.aero.refactorapp.data.repository.CartRepositoryImpl
 import com.aero.refactorapp.data.repository.ProductRepositoryImpl
 import com.aero.refactorapp.data.repository.ThemeRepositoryImpl
@@ -33,4 +35,10 @@ abstract class RepositoryModule {
     abstract fun bindThemeRepository(
         themeRepositoryImpl: ThemeRepositoryImpl
     ): ThemeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindProductRemoteDataSource(
+        productRemoteDataSourceImpl: ProductRemoteDataSourceImpl
+    ): ProductRemoteDataSource
 }
