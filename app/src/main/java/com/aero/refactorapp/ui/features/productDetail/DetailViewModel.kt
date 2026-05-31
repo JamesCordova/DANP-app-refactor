@@ -1,8 +1,8 @@
 package com.aero.refactorapp.ui.features.productDetail
 
 import androidx.lifecycle.ViewModel
-import com.aero.modularstore.model.Product
-import com.aero.modularstore.model.ProductCategory
+import com.aero.refactorapp.domain.model.Product
+import com.aero.refactorapp.domain.model.CategoryProduct
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +20,7 @@ data class DetailUiState(
                 name = "Laptop Gamer",
                 description = "RTX 4070 + Ryzen 9",
                 price = 2500.0,
-                category = ProductCategory.COMPUTERS,
+                category = CategoryProduct.COMPUTERS,
                 imageUrl = "https://www.itsitio.com/wp-content/uploads/2020/07/G531-1-scaled-1.jpg"
             ),
             Product(
@@ -28,7 +28,7 @@ data class DetailUiState(
                 name = "Mechanical Keyboard",
                 description = "RGB Switch Blue",
                 price = 120.0,
-                category = ProductCategory.ACCESSORIES,
+                category = CategoryProduct.ACCESSORIES,
                 imageUrl = "https://i.insider.com/5fd7cf6b78a5740019a15560?width=1200&format=jpeg"
             ),
             Product(
@@ -36,7 +36,7 @@ data class DetailUiState(
                 name = "Gaming Mouse",
                 description = "16000 DPI",
                 price = 75.0,
-                category = ProductCategory.ACCESSORIES,
+                category = CategoryProduct.ACCESSORIES,
                 imageUrl = "https://dlcdnwebimgs.asus.com/gain/1F5AFFA6-D3DC-42CA-B37D-03DAAE123012/w750/h470/fwebp"
             ),
             Product(
@@ -44,7 +44,7 @@ data class DetailUiState(
                 name = "Iphone 27",
                 description = "144Hz IPS",
                 price = 1220.0,
-                category = ProductCategory.COMPUTERS,
+                category = CategoryProduct.COMPUTERS,
                 imageUrl = "https://i.blogs.es/60b358/ios-27/500_333.webp"
             )
         )

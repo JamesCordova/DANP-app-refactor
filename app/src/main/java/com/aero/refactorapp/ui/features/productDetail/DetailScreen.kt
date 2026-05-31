@@ -74,6 +74,7 @@ fun DetailScreen(
 
             AddToCartButton(
                 onClick = {
+                    // should call to viewmodel then viewmodel call to repository
                     CartRepository.addToCart(product)
                     navigationCallbacks.navigateToCart()
                 }
