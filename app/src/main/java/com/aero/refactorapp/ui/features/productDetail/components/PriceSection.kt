@@ -1,5 +1,6 @@
 package com.aero.refactorapp.ui.features.productDetail.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +18,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun PriceSection(price: Double, productId: Int) {
     Column {
-        // Precio
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -37,7 +37,6 @@ fun PriceSection(price: Double, productId: Int) {
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        // ID del Producto
         Text(
             text = "ID del Producto: $productId",
             style = MaterialTheme.typography.bodySmall,
