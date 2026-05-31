@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.aero.refactorapp.ui.MainViewModel
 import com.aero.refactorapp.ui.features.cart.CartScreen
 import com.aero.refactorapp.ui.features.cart.CartViewModel
 import com.aero.refactorapp.ui.features.favorites.FavoritesScreen
@@ -27,7 +28,7 @@ import com.aero.refactorapp.ui.navigation.components.*
 
 @Composable
 fun AppNavigation(
-    onThemeChange: (String) -> Unit
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
     val productStoreViewModel: ProductStoreViewModel = hiltViewModel()
@@ -112,7 +113,7 @@ fun AppNavigation(
             composable(NavScreens.HOME.route) {
                 ProductStoreScreen(
                     navigationCallbacks = navigationCallbacks,
-                    onThemeChange = onThemeChange,
+                    onThemeChange = mainViewModel::onThemeChange,
                     productStoreViewModel = productStoreViewModel
                 )
             }
