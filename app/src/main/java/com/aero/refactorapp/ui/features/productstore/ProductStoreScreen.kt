@@ -12,7 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aero.refactorapp.ui.navigation.NavigationCallbacks
-import com.aero.refactorapp.ui.features.productstore.components.CategoryFilterButtons
+import com.aero.refactorapp.ui.features.productstore.components.ProductCategoryButtons
 import com.aero.refactorapp.ui.features.productstore.components.ProductCard
 import com.aero.refactorapp.ui.features.productstore.components.SearchBar
 import com.aero.refactorapp.ui.features.productstore.components.ThemeSelector
@@ -38,7 +38,7 @@ fun ProductStoreScreen(
             onQueryChange = productStoreViewModel::onSearchQueryChanged
         )
         Spacer(modifier = Modifier.height(12.dp))
-        CategoryFilterButtons(
+        ProductCategoryButtons(
             currentFilter = uiState.selectedCategory,
             onFilterChange = productStoreViewModel::onCategorySelected
         )

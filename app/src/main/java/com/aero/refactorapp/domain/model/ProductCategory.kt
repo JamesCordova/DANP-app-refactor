@@ -1,6 +1,6 @@
 package com.aero.refactorapp.domain.model
 
-enum class CategoryProduct(val label: String) {
+enum class ProductCategory(val label: String) {
     ALL("Todos"),
     COMPUTERS("Dispositivos"),
     ACCESSORIES("Accesorios")

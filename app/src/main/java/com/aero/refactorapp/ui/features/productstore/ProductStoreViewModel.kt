@@ -3,7 +3,7 @@ package com.aero.refactorapp.ui.features.productstore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aero.refactorapp.domain.model.Product
-import com.aero.refactorapp.domain.model.CategoryProduct
+import com.aero.refactorapp.domain.model.ProductCategory
 import com.aero.refactorapp.domain.model.User
 import com.aero.refactorapp.domain.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 data class HomeUiState(
     val products: List<Product> = emptyList(),
-    val selectedCategory: CategoryProduct = CategoryProduct.ALL,
+    val selectedCategory: ProductCategory = ProductCategory.ALL,
     val favoriteProductIds: Set<Int> = emptySet(),
     val searchQuery: String = "",
     val currentUser: User = User(
@@ -28,7 +28,7 @@ data class HomeUiState(
 ) {
 	val filteredProducts: List<Product>
 		get() {
-			val categoryFiltered = if (selectedCategory == CategoryProduct.ALL) {
+			val categoryFiltered = if (selectedCategory == ProductCategory.ALL) {
 				products
 			} else {
 				products.filter { it.category == selectedCategory }
@@ -49,7 +49,7 @@ data class HomeUiState(
 class ProductStoreViewModel @Inject constructor(
     private val productRepository: ProductRepository
 ) : ViewModel() {
-    private val _selectedCategory = MutableStateFlow(CategoryProduct.ALL)
+    private val _selectedCategory = MutableStateFlow(ProductCategory.ALL)
     private val _searchQuery = MutableStateFlow("")
 
     val uiState: StateFlow<HomeUiState> = combine(
@@ -70,7 +70,7 @@ class ProductStoreViewModel @Inject constructor(
         initialValue = HomeUiState()
     )
 
-	fun onCategorySelected(category: CategoryProduct) {
+	fun onCategorySelected(category: ProductCategory) {
 		_selectedCategory.value = category
 	}
 
