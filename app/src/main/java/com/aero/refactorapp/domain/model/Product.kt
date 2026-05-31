@@ -1,0 +1,10 @@
+package com.aero.refactorapp.domain.model
+
+data class Product(
+    val id: Int,
+    val name: String,
+    val description: String,
+    val price: Double,
+    val category: CategoryProduct,
+    val imageUrl: String,
+)
